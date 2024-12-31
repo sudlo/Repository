@@ -1,0 +1,51 @@
+name: $(BuildDefinitionName)-($(Build.SourceBranchName))-$(Rev:rrr)
+
+trigger: none
+#  branches:
+#    include:
+#    - main
+
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:  
+# Read global variables common for Yaml pipelines and Terraform
+# These variables define governance related details (portfolio name, id, etc.) of this solution implementation.
+- template: ../../parameters/globalvariables.yml
+- name: system_accesstoken
+  value: $(System.AccessToken)
+
+stages:
+- stage: TerraformContinuousIntegration
+  displayName: Terraform Module - CI
+  jobs:
+  - job: TerraformContinuousIntegrationJob
+    displayName: TerraformContinuousIntegration - CI Job
+    pool:
+      vmImage: ubuntu-20.04
+    steps:
+    - checkout: self
+      path: s/config
+      displayName: 'Check-out Self'
+
+- template: terraform-stages-template.yml
+  parameters:
+    environment: prod
+    environmentDisplayName: Prod
+    concatenateddashedname: $(concatenateddashedname)
+    shortapplicationname: $(shortapplicationname)
+    applicationsubname: $(applicationsubname)
+    location: $(location)
+    TerraformArguments: >-
+      -var concatenateddashedname=$(concatenateddashedname)
+      -var environment=prod
+    # For additional security, pass secret through environment instead of command line.
+    # Terraform recognizes TF_VAR prefixed environment variables.
+    TerraformEnvVariables:
+      TF_IN_AUTOMATION: true

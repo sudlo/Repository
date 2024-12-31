@@ -1,0 +1,17 @@
+variables:  
+  - name: applicationname 
+    value: 'ess'
+  - name: concatenateddashedname 
+    value: 'ess'
+  - name: shortapplicationname 
+    value: 'ess'
+  - name: applicationsubname 
+    value: 'drhub'
+  - name: prodenvironment 
+    value: 'prod'
+  - name: SubAzureSubscription 
+    value: 'ESS_DRHub_Subscription'
+  - name: location 
+    value: 'Australia East'
+  - name: shortregion 
+    value: 'EAU'
