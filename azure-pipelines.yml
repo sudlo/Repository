@@ -1,0 +1,18 @@
+trigger:
+- main  # Change this to your default branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Choose the appropriate VM image
+
+steps:
+- checkout: self  # Checkout the code from the repository
+
+# Example of running a script from the core-infra folder
+- script: |
+    echo "Running core-infra scripts"
+    cd pipeline/core-infra
+    # Add your commands here, e.g., running a Python script
+    python your_script.py  # Replace with your actual script
+  displayName: 'Run Core Infrastructure Scripts'
+
+# Add more steps as needed
